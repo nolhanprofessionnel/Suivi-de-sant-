@@ -51,3 +51,48 @@ for i in range (0,len(historique)):
     print(f"Jour {i+1} - Eau         : {'█' * historique[i]['eau']}")               #'█' caractère particulier
     print(f"Jour {i+1} - Sommeil     : {'█' * int(historique[i]['sommeil'])}")
     print(f"Jour {i+1} - Humeur      : {'█' * historique[i]['humeur']}")
+
+
+if len(historique) == 7:
+    #Création de la moyenne d'eau
+    m=0
+    for jour in historique:
+        m=m+ jour['eau']
+    moy_eau=m/len(historique)
+
+    #Création moyenne sommeil
+    m=0
+    for jour in historique:
+        m=m+jour['sommeil']
+    moy_sommeil=m/len(historique)
+
+    #Création moyenne humeur
+    m=0
+    for jour in historique:
+        m=m+jour['humeur']
+    moy_humeur=m/len(historique)
+
+    #Création du dictionnaire pour le bilan de la semaine
+    bilan_semaine={
+        "date": str(date.today()),
+        "moyenne_eau": moy_eau,
+        "moyenne_sommeil": moy_sommeil,
+        "moyenne_humeur": moy_humeur,
+    }
+
+    if os.path.exists("suivi_mois.json"):                #Vérification si le fichier demandé existe 
+        with open("suivi_mois.json","r") as fichier:
+            precedent=json.load(fichier)
+    else:
+        precedent = []
+
+    precedent.append(bilan_semaine)                                 #Ecrire le bilan de la semaine dans la liste precedent
+
+    with open("suivi_mois.json","w") as fichier:
+        json.dump(precedent, fichier)
+    print("Données sauvegardées !")
+
+    print("Semaine complète !")
+
+    with open("semaine_actuelle.json","w") as fichier:                  #Réinitialiser la semaine qu'on vient de complété
+        json.dump([], fichier)
